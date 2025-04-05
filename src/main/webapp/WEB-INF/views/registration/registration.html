@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+
+<div class="container">
+    <h2>Регистрация</h2>
+    <form th:method="POST" th:action="@{/registration}" th:object="${userDto}">
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</div>
+
+</body>
+</html>

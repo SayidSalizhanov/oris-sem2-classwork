@@ -19,11 +19,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity,
                                                        UserDetailsService userDetailsService) throws Exception {
-        return httpSecurity.getSharedObject(AuthenticationManagerBuilder.class)
+        AuthenticationManagerBuilder builder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
+        builder
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .and()
-                .build();
+                .passwordEncoder(passwordEncoder());
+        return builder.build();
     }
 
     @Bean
@@ -43,7 +43,11 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return webSecurity -> webSecurity.debug(true)
                 .ignoring()
-                .requestMatchers("/css/**", "/template/**", "/js/**", "/images/**", "/favicon.ico");
+                .requestMatchers("/css/**", "/registration", "/template/**", "/js/**", "/images/**", "/favicon.ico");
     }
 
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

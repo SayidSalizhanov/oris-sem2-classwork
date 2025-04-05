@@ -37,6 +37,8 @@ dependencies {
     implementation("com.mchange:c3p0:0.10.2")
     implementation("org.freemarker:freemarker:2.3.34")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
+    implementation("org.thymeleaf:thymeleaf-spring6:3.1.3.RELEASE")
+    compileOnly("org.projectlombok:lombok:1.18.30")
 }
 
 tasks.test {

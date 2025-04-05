@@ -72,7 +72,7 @@ public class PersistenceConfig implements EnvironmentAware {
     }
 
     @Bean
-    PlatformTransactionManager platformTransactionManager() {
+    public PlatformTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory());
         return transactionManager;
@@ -90,12 +90,12 @@ public class PersistenceConfig implements EnvironmentAware {
         return sessionFactoryBean;
     }
 
-    @Bean
-    public PlatformTransactionManager hibernateTransactionManager() {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
-        return transactionManager;
-    }
+//    @Bean
+//    public PlatformTransactionManager hibernateTransactionManager() {
+//        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+//        transactionManager.setSessionFactory(sessionFactory().getObject());
+//        return transactionManager;
+//    }
 
 
     @Bean
