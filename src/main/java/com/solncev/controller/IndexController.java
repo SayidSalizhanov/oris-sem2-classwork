@@ -10,4 +10,9 @@ public class IndexController {
     public String index() {
         return "index.html";
     }
+
+    @GetMapping(value = "/profile")
+    public String profile() {
+        return "profile";
+    }
 }

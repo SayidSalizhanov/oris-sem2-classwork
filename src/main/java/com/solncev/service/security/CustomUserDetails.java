@@ -1,4 +1,4 @@
-package com.solncev.service;
+package com.solncev.service.security;
 
 import com.solncev.entity.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,5 +31,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return user.getUsername();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return user.isEnabled();
     }
 }

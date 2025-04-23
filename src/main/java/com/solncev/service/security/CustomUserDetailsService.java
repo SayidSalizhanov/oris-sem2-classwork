@@ -1,4 +1,4 @@
-package com.solncev.service;
+package com.solncev.service.security;
 
 import com.solncev.entity.User;
 import com.solncev.repository.UserRepository;

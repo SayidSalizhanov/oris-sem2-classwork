@@ -1,7 +1,8 @@
 plugins {
     id("java")
     id("application")
-    id("war")
+    id("org.springframework.boot") version "3.4.4"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "com.solncev"
@@ -22,23 +23,19 @@ application {
 }
 
 dependencies {
-    implementation("org.springframework:spring-webmvc:$springVersion")
-    implementation("org.springframework:spring-jdbc:$springVersion")
-    implementation("org.springframework:spring-orm:$springVersion")
-    implementation("org.springframework:spring-context-support:$springVersion")
-    implementation("org.springframework.security:spring-security-core:$springSecurityVersion")
-    implementation("org.springframework.security:spring-security-web:$springSecurityVersion")
-    implementation("org.springframework.security:spring-security-config:$springSecurityVersion")
-    implementation("org.springframework.security:spring-security-taglibs:$springSecurityVersion")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-freemarker")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("jakarta.servlet:jakarta.servlet-api:$jakartaVersion")
-    implementation("org.hibernate:hibernate-core:$hibernateVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
-    implementation("org.springframework.data:spring-data-jpa:3.4.4")
-    implementation("com.mchange:c3p0:0.10.2")
-    implementation("org.freemarker:freemarker:2.3.34")
+    implementation("javax.mail:javax.mail-api:1.6.2")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
-    implementation("org.thymeleaf:thymeleaf-spring6:3.1.3.RELEASE")
-    compileOnly("org.projectlombok:lombok:1.18.30")
+    implementation("org.springframework.security:spring-security-taglibs:$springSecurityVersion")
+    implementation("org.apache.tomcat:tomcat-jsp-api:10.1.20")
+    implementation("javax.servlet.jsp:jsp-api:2.1")
 }
 
 tasks.test {
