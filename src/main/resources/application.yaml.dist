@@ -20,8 +20,8 @@ spring:
 
   mail:
     host: smtp.mail.ru
-    username: "tjmoney@mail.ru"
-    password: "mtF3mq4Bu1xPwbkhUNub"
+    username: "your-mail@mail.ru"
+    password: "application-mail-password"
     port: 465
     properties:
       mail:
@@ -37,10 +37,6 @@ spring:
 
 mail:
   content: "Dear {name}, please follow the link below to verify your account: <a href={url}>VERIFY</a>"
-  from: "tjmoney@mail.ru"
+  from: "your-mail@mail.ru"
   sender: Test Application
   subject: Please verify your account
-
-logging:
-  level:
-    root: info

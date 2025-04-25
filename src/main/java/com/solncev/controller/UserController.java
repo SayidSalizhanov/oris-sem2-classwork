@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -30,10 +31,16 @@ public class UserController {
         return userService.findAll();
     }
 
-    @PostMapping("/user")
-    public String createUser(@RequestBody CreateUserDto userDto, HttpServletRequest request) {
-        String url = request.getRequestURL().toString().replace(request.getServletPath(), "");
-        userService.create(userDto, url);
-        return "sign_up_success";
+//    @PostMapping("/user")
+//    public String createUser(@RequestBody CreateUserDto userDto, HttpServletRequest request) {
+//        String url = request.getRequestURL().toString().replace(request.getServletPath(), "");
+//        userService.create(userDto, url);
+//        return "index";
+//    }
+
+    @GetMapping("/verification")
+    public String verifyUser(@RequestParam("code") String code) {
+        userService.verifyUser(code);
+        return "verification_success";
     }
 }

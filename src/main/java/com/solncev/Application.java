@@ -9,10 +9,6 @@ import java.util.Arrays;
 @SpringBootApplication
 public class Application {
 
-    public Application(FreeMarkerConfigurer configurer) {
-        configurer.getTaglibFactory().setClasspathTlds(Arrays.asList("/META-INF/security.tld"));
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
