@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByName(String name);
 
     Optional<User> findByVerificationCode(String code);
+
+    List<User> findAllByEnabledTrue();
 }

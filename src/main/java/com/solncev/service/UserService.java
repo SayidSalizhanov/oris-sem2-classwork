@@ -7,22 +7,24 @@ import com.solncev.entity.Role;
 import com.solncev.entity.User;
 import com.solncev.repository.RoleRepository;
 import com.solncev.repository.UserRepository;
+import com.solncev.util.MailUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
@@ -30,18 +32,7 @@ public class UserService {
     private final BCryptPasswordEncoder encoder;
     private final JavaMailSender mailSender;
     private final MailConfig mailConfig;
-
-    public UserService(UserRepository userRepository,
-                      RoleRepository roleRepository,
-                      BCryptPasswordEncoder encoder,
-                      JavaMailSender mailSender,
-                      MailConfig mailConfig) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.encoder = encoder;
-        this.mailSender = mailSender;
-        this.mailConfig = mailConfig;
-    }
+    private final FxRatesApiService fxRatesApiService;
 
     @Transactional
     public UserDto create(CreateUserDto dto, String baseUrl) {
@@ -100,6 +91,44 @@ public class UserService {
         user.setEnabled(true);
         user.setVerificationCode(null);
         userRepository.save(user);
+    }
+
+    public void sendCurrencyRatesToUser(String userEmail, String baseCurrency) {
+        Map<String, Double> rates = fxRatesApiService.getLatestRates(baseCurrency);
+
+        if (rates == null) {
+            throw new RuntimeException("Failed to fetch exchange rates");
+        }
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+
+        String content = MailUtil.buildEmailContent(rates, mailConfig.getSender(), baseCurrency);
+
+        try {
+            mimeMessageHelper.setFrom(mailConfig.getFrom(), mailConfig.getSender());
+            mimeMessageHelper.setTo(userEmail);
+            mimeMessageHelper.setSubject("Daily Currency Rates");
+            mimeMessageHelper.setText(content, true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new RuntimeException("Failed to send currency rates email", e);
+        }
+    }
+
+    @Scheduled(cron = "0 0 7 * * *") // в 7:00 утра каждого дня
+    public void sendDailyRatesToVerifiedUsers() {
+        List<User> verifiedUsers = userRepository.findAllByEnabledTrue();
+        Map<String, Double> rates = fxRatesApiService.getLatestRates("USD");
+
+        if (rates == null) {
+            throw new RuntimeException("Failed to fetch exchange rates");
+        }
+
+        for (User user : verifiedUsers) {
+            sendCurrencyRatesToUser(user.getEmail(), "USD");
+        }
     }
 }
 

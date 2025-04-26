@@ -35,6 +35,11 @@ spring:
           starttls:
             enable: false
 
+fxrates:
+  api:
+    api-key:
+    base-url:
+
 mail:
   content: "Dear {name}, please follow the link below to verify your account: <a href={url}>VERIFY</a>"
   from: "your-mail@mail.ru"
